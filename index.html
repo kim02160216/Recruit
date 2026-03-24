@@ -1,6 +1,92 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내부 보고서</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAFBFD; --surface: #FFFFFF; --text-primary: #1A1D23;
+            --text-secondary: #4A5068; --text-muted: #8B90A0;
+            --accent: #2C5AE9; --accent-light: #EBF0FF; --accent-dark: #1E3FA6;
+            --divider: #E8EBF0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+            --radius: 12px; --radius-sm: 8px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif; background:var(--bg); color:var(--text-primary); line-height:1.7; -webkit-font-smoothing:antialiased; }
+        .page { max-width:860px; margin:0 auto; padding:40px 24px 80px; }
+        .page-header { margin-bottom:36px; }
+        .page-header .org { font-size:12px; font-weight:600; color:var(--accent); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+        .page-header h1 { font-size:28px; font-weight:800; color:var(--text-primary); letter-spacing:-.5px; }
+        .page-header .desc { font-size:14px; color:var(--text-muted); margin-top:6px; }
+        .report-list { display:flex; flex-direction:column; gap:12px; }
+        .report-card {
+            display:flex; align-items:center; gap:20px;
+            background:var(--surface); border:1px solid var(--divider);
+            border-radius:var(--radius); padding:24px 28px;
+            box-shadow:var(--shadow-sm); text-decoration:none; color:inherit;
+            transition:all .2s ease;
+        }
+        .report-card:hover {
+            box-shadow:var(--shadow-md); border-color:var(--accent);
+            transform:translateY(-2px);
+        }
+        .report-card .card-icon {
+            flex-shrink:0; width:44px; height:44px; border-radius:12px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:18px; font-weight:700;
+        }
+        .card-icon.blue { background:var(--accent-light); color:var(--accent); }
+        .card-icon.green { background:#F0FDF4; color:#16A34A; }
+        .card-icon.amber { background:#FFFBEB; color:#D97706; }
+        .card-icon.purple { background:#F5F3FF; color:#7C3AED; }
+        .card-body { flex:1; min-width:0; }
+        .card-body .card-title { font-size:16px; font-weight:700; color:var(--text-primary); margin-bottom:3px; }
+        .card-body .card-desc { font-size:13px; color:var(--text-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .card-meta { flex-shrink:0; text-align:right; }
+        .card-meta .card-date { font-size:12px; color:var(--text-muted); font-weight:500; }
+        .card-meta .card-badge {
+            display:inline-block; font-size:10px; font-weight:600;
+            padding:3px 10px; border-radius:20px; margin-top:4px;
+            background:var(--accent-light); color:var(--accent-dark);
+            letter-spacing:.3px;
+        }
+        .page-footer { text-align:center; padding:40px 0 0; color:var(--text-muted); font-size:12px; }
+        .page-footer .divider-line { width:60px; height:2px; background:var(--divider); margin:0 auto 16px; }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="page-header">
+        <div class="org">Metacraft</div>
+        <h1>내부 보고서</h1>
+        <div class="desc">기획·전략 보고서 아카이브</div>
+    </div>
+    <div class="report-list">
+        <a href="reports/recruit.html" class="report-card">
+            <div class="card-icon blue">01</div>
+            <div class="card-body">
+                <div class="card-title">채용 공고 개선안</div>
+                <div class="card-desc">AI 프롬프트 엔지니어 · AI 이미지 크리에이터 — 직무 재정의 및 공고 개선 방향</div>
+            </div>
+            <div class="card-meta">
+                <div class="card-date">2026.03.24</div>
+                <div class="card-badge">Internal Report</div>
+            </div>
+        </a>
+    </div>
+    <div class="page-footer">
+        <div class="divider-line"></div>
+        메타크래프트 · 내부 보고서 시스템
+    </div>
+</div>
+</body>
+</html><!DOCTYPE html>
+<html lang="ko">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>채용 공고 개선안 보고서</title>
