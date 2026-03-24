@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Publisher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2128;--border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.15);--text:#e6edf3;--muted:#7d8590;--accent:#4f8ef7;--accent2:#7c5cfc;--success:#3fb950;--warning:#d29922;--danger:#f85149}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Noto Sans KR',system-ui;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
+  .app{display:grid;grid-template-rows:56px 1fr;min-height:100vh}
+  header{display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:var(--bg)}
+  .logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  .logo-text{font-weight:700;font-size:15px}
+  .step-indicator{margin-left:auto;display:flex;gap:6px}
+  .step-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);transition:background .3s}
+  .step-dot.active{background:var(--accent)}
+  .step-dot.done{background:var(--success)}
+  main{overflow:auto}
+  .panel{max-width:900px;margin:0 auto;padding:40px 24px}
+  .panel-title{font-size:22px;font-weight:700;margin-bottom:8px}
+  .panel-sub{color:var(--muted);margin-bottom:32px;line-height:1.6}
+  .field{margin-bottom:20px}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+  .field input,.field textarea,.field select{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:border-color .2s}
+  .field input:focus,.field textarea:focus{border-color:var(--accent)}
+  .field textarea{resize:vertical;line-height:1.7}
+  .field select option{background:var(--surface2)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:600px){.row2{grid-template-columns:1fr}}
+  .btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:8px;padding:11px 22px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+  .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+  .btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+  .btn-primary:disabled{background:var(--surface2);color:var(--muted);cursor:not-allowed;transform:none}
+  .btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--muted)}
+  .btn-ghost:hover{border-color:var(--text);color:var(--text)}
+  .btn-success{background:linear-gradient(135deg,#1a7f37,#2ea043);color:#fff}
+  .btn-success:disabled{background:var(--surface2);color:var(--muted);cursor:not-allowed}
+  .btn-bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+  .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .alert{border-radius:8px;padding:12px 16px;font-size:13px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px}
+  .alert-danger{background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.3);color:#ffa198}
+  .alert-info{background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.3);color:#79b8ff}
+  .alert-success{background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.3);color:#7ee787}
+  .config-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
+  .config-title{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px}
+  .config-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:600px){.config-row{grid-template-columns:1fr}}
+  .preview-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+  .preview-bar h2{font-size:18px;font-weight:600}
+  .browser-chrome{background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden}
+  .browser-bar{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+  .browser-dots{display:flex;gap:5px}
+  .browser-dots span{width:10px;height:10px;border-radius:50%}
+  .dot-r{background:#f85149}.dot-y{background:#d29922}.dot-g{background:#3fb950}
+  .browser-url{flex:1;background:var(--surface2);border-radius:4px;padding:4px 10px;font-size:11px;color:var(--muted);margin-left:8px}
+  .preview-frame{width:100%;height:65vh;border:none;background:#fff}
+  .done-wrap{text-align:center;padding-top:48px}
+  .done-icon{font-size:56px;margin-bottom:20px}
+  .done-title{font-size:26px;font-weight:700;margin-bottom:10px}
+  .done-sub{color:var(--muted);margin-bottom:36px;line-height:1.7}
+  .url-card{background:var(--surface);border:1px solid rgba(79,142,247,.4);border-radius:12px;padding:24px 28px;display:inline-block;min-width:360px;max-width:100%;margin-bottom:28px}
+  .url-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+  .url-value{font-size:15px;color:var(--accent);word-break:break-all;margin-bottom:16px;font-weight:500}
+  .url-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .url-actions .btn{font-size:13px;padding:8px 16px}
+  .report-list{display:grid;gap:10px;margin-top:24px}
+  .report-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s}
+  .report-item:hover{border-color:var(--border2);transform:translateY(-1px)}
+  .report-icon{width:36px;height:36px;border-radius:8px;background:rgba(79,142,247,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+  .report-info{flex:1;min-width:0}
+  .report-name{font-size:14px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .report-meta{font-size:12px;color:var(--muted)}
+  .report-arrow{color:var(--muted);font-size:18px}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:28px}
+  .tab{padding:8px 16px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+  .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .progress-steps{display:flex;flex-direction:column;gap:10px;margin:20px 0}
+  .progress-step{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:8px;background:var(--surface);font-size:13px}
+  .progress-step.done{background:rgba(63,185,80,.08)}
+  .progress-step.active{background:rgba(79,142,247,.08)}
+  .step-icon2{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+  .step-icon2.done-bg{background:rgba(63,185,80,.2);color:var(--success)}
+  .step-icon2.active-bg{background:rgba(79,142,247,.2)}
+  .step-icon2.pending-bg{background:var(--surface2);color:var(--muted)}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo">📊</div>
+    <span class="logo-text">Report Publisher</span>
+    <div class="step-indicator">
+      <div class="step-dot active" id="dot1"></div>
+      <div class="step-dot" id="dot2"></div>
+      <div class="step-dot" id="dot3"></div>
+    </div>
+  </header>
+  <main id="main">
+    <div class="panel hidden" id="panel-config">
+      <div class="panel-title">⚙️ 초기 설정</div>
+      <div class="panel-sub">GitHub Token과 레포 정보를 입력하면 브라우저에 저장됩니다. 한 번만 설정하면 돼요.</div>
+      <div class="config-card">
+        <div class="config-title">GitHub 연동</div>
+        <div class="config-row">
+          <div class="field"><label>GitHub Owner</label><input type="text" id="cfg-owner" placeholder="kim02160216"></div>
+          <div class="field"><label>GitHub Repo</label><input type="text" id="cfg-repo" placeholder="Recruit"></div>
+        </div>
+        <div class="field"><label>GitHub Personal Access Token</label><input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxxxxxx"></div>
+      </div>
+      <div class="config-card">
+        <div class="config-title">Vercel 도메인</div>
+        <div class="field"><label>사이트 URL</label><input type="text" id="cfg-url" placeholder="https://recruit-seven-omega.vercel.app"></div>
+      </div>
+      <div id="config-alert"></div>
+      <div class="btn-bar"><button class="btn btn-primary" onclick="saveConfig()">💾 저장하고 시작</button></div>
+    </div>
+    <div class="panel" id="panel-input">
+      <div class="panel-title">📝 보고서 내용 붙여넣기</div>
+      <div class="panel-sub">보고서 원문을 붙여넣으면 Claude AI가 대시보드형 HTML로 자동 변환합니다.</div>
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('write')">작성</button>
+        <button class="tab" onclick="switchTab('history')">보고서 목록</button>
+        <button class="tab" onclick="switchTab('settings')">설정</button>
+      </div>
+      <div id="tab-write">
+        <div class="row2">
+          <div class="field"><label>보고서 제목</label><input type="text" id="title" placeholder="예: 2025 Q1 플랫폼 성과 보고"></div>
+          <div class="field"><label>보고서 유형</label><select id="report-type"><option value="dashboard">대시보드형 (KPI + 차트)</option><option value="narrative">서술형 (섹션 중심)</option><option value="executive">임원 요약 (1페이지)</option></select></div>
+        </div>
+        <div class="field"><label>보고서 원문 (한국어/영어 모두 OK)</label><textarea id="raw-text" rows="16" placeholder="여기에 보고서 내용을 붙여넣으세요."></textarea></div>
+        <div id="input-alert"></div>
+        <div class="btn-bar">
+          <button class="btn btn-primary" id="btn-generate" onclick="generateReport()">✨ HTML 보고서 생성</button>
+          <button class="btn btn-ghost" onclick="clearAll()">초기화</button>
+        </div>
+      </div>
+      <div id="tab-history" class="hidden"><div id="history-list"><div style="color:var(--muted);font-size:13px;padding:20px 0;">보고서가 없습니다.</div></div></div>
+      <div id="tab-settings" class="hidden">
+        <div class="config-card"><div class="config-title">현재 설정</div>
+          <div class="config-row">
+            <div class="field"><label>GitHub Owner</label><input type="text" id="s-owner"></div>
+            <div class="field"><label>GitHub Repo</label><input type="text" id="s-repo"></div>
+          </div>
+          <div class="field"><label>GitHub Token</label><input type="password" id="s-token"></div>
+          <div class="field"><label>Site URL</label><input type="text" id="s-url"></div>
+        </div>
+        <div class="btn-bar"><button class="btn btn-primary" onclick="saveConfigFromSettings()">💾 설정 저장</button></div>
+        <div id="settings-alert" style="margin-top:12px;"></div>
+      </div>
+    </div>
+    <div class="panel hidden" id="panel-preview">
+      <div class="preview-bar">
+        <div><h2>🔍 미리보기</h2><div style="color:var(--muted);font-size:13px;margin-top:4px;">확인 후 GitHub에 배포하세요. Vercel이 자동으로 배포합니다.</div></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-ghost" onclick="goBack()">← 다시 편집</button>
+          <button class="btn btn-success" id="btn-publish" onclick="publishReport()">🚀 GitHub에 배포</button>
+        </div>
+      </div>
+      <div id="preview-alert"></div>
+      <div class="browser-chrome">
+        <div class="browser-bar"><div class="browser-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div><div class="browser-url" id="preview-url-bar">미리보기</div></div>
+        <iframe class="preview-frame" id="preview-iframe" sandbox="allow-scripts"></iframe>
+      </div>
+      <details style="margin-top:14px;"><summary style="color:var(--muted);font-size:12px;cursor:pointer;">HTML 소스 보기</summary>
+        <pre id="html-source" style="background:var(--surface);border-radius:8px;padding:16px;overflow:auto;font-size:11px;color:var(--muted);max-height:280px;margin-top:8px;"></pre></details>
+    </div>
+    <div class="panel hidden" id="panel-deploying">
+      <div class="panel-title">🚀 배포 중...</div>
+      <div class="panel-sub">GitHub에 push하고 Vercel 배포를 기다리는 중입니다.</div>
+      <div class="progress-steps">
+        <div class="progress-step" id="ps1"><div class="step-icon2 pending-bg" id="ps1-icon">1</div><div><div style="font-weight:500">GitHub 파일 업로드</div><div style="color:var(--muted);font-size:12px">reports/ 폴더에 HTML 파일 push</div></div></div>
+        <div class="progress-step" id="ps2"><div class="step-icon2 pending-bg" id="ps2-icon">2</div><div><div style="font-weight:500">보고서 목록 업데이트</div><div style="color:var(--muted);font-size:12px">index.html에 새 보고서 추가</div></div></div>
+        <div class="progress-step" id="ps3"><div class="step-icon2 pending-bg" id="ps3-icon">3</div><div><div style="font-weight:500">Vercel 자동 배포 대기</div><div style="color:var(--muted);font-size:12px">GitHub push 감지 → 약 30-60초</div></div></div>
+      </div>
+      <div id="deploy-alert"></div>
+    </div>
+    <div class="panel hidden" id="panel-done">
+      <div class="done-wrap">
+        <div class="done-icon">🎉</div><div class="done-title">배포 완료!</div>
+        <div class="done-sub">Vercel 자동 배포가 완료되면 아래 URL로 접근할 수 있습니다.<br>(첫 배포 시 30-60초 소요)</div>
+        <div class="url-card">
+          <div class="url-label">보고서 URL</div>
+          <div class="url-value" id="final-url"></div>
+          <div class="url-actions">
+            <button class="btn btn-ghost" onclick="copyUrl()" id="copy-btn">📋 URL 복사</button>
+            <button class="btn btn-ghost" onclick="openUrl()">🔗 열기</button>
+          </div>
+        </div>
+        <div>
+          <button class="btn btn-primary" onclick="resetAll()" style="margin-right:10px;">+ 새 보고서</button>
+          <button class="btn btn-ghost" onclick="goToList()">목록 보기</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script>
+let state={html:'',title:'',slug:'',publishedUrl:''}
+function cfg(k){return localStorage.getItem('rp_'+k)||''}
+function loadConfig(){
+  if(!localStorage.getItem('rp_owner'))localStorage.setItem('rp_owner','kim02160216')
+  if(!localStorage.getItem('rp_repo'))localStorage.setItem('rp_repo','Recruit')
+  if(!localStorage.getItem('rp_url'))localStorage.setItem('rp_url','https://recruit-seven-omega.vercel.app')
+}
+function showPanel(name){
+  ['input','preview','deploying','done','config'].forEach(p=>document.getElementById('panel-'+p).classList.add('hidden'))
+  document.getElementById('panel-'+name).classList.remove('hidden')
+  const dots=[document.getElementById('dot1'),document.getElementById('dot2'),document.getElementById('dot3')]
+  dots.forEach(d=>{d.classList.remove('active','done')})
+  const map={input:0,preview:1,deploying:2,done:2}
+  for(let i=0;i<(map[name]||0);i++)dots[i].classList.add('done')
+  if(map[name]!==undefined)dots[map[name]].classList.add('active')
+}
+function goBack(){showPanel('input')}
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'))
+  document.querySelectorAll('[id^="tab-"]').forEach(el=>el.classList.add('hidden'))
+  event.target.classList.add('active')
+  document.getElementById('tab-'+t).classList.remove('hidden')
+  if(t==='history')renderHistory()
+  if(t==='settings')loadSettingsForm()
+}
+function saveConfig(){
+  const o=document.getElementById('cfg-owner').value.trim()
+  const r=document.getElementById('cfg-repo').value.trim()
+  const t=document.getElementById('cfg-token').value.trim()
+  const u=document.getElementById('cfg-url').value.trim().replace(/\/$/,'')
+  if(!o||!r||!t||!u){document.getElementById('config-alert').innerHTML='<div class="alert alert-danger">⚠️ 모든 필드를 입력해주세요.</div>';return}
+  localStorage.setItem('rp_owner',o);localStorage.setItem('rp_repo',r);localStorage.setItem('rp_token',t);localStorage.setItem('rp_url',u)
+  showPanel('input')
+}
+function loadSettingsForm(){
+  document.getElementById('s-owner').value=cfg('owner')
+  document.getElementById('s-repo').value=cfg('repo')
+  document.getElementById('s-token').value=cfg('token')
+  document.getElementById('s-url').value=cfg('url')
+}
+function saveConfigFromSettings(){
+  const o=document.getElementById('s-owner').value.trim()
+  const r=document.getElementById('s-repo').value.trim()
+  const t=document.getElementById('s-token').value.trim()
+  const u=document.getElementById('s-url').value.trim().replace(/\/$/,'')
+  localStorage.setItem('rp_owner',o);localStorage.setItem('rp_repo',r)
+  if(t)localStorage.setItem('rp_token',t)
+  if(u)localStorage.setItem('rp_url',u)
+  document.getElementById('settings-alert').innerHTML='<div class="alert alert-success">✅ 저장되었습니다.</div>'
+  setTimeout(()=>document.getElementById('settings-alert').innerHTML='',2000)
+}
+async function callClaude(sys,usr){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:8000,system:sys,messages:[{role:'user',content:usr}]})})
+  if(!r.ok)throw new Error('Claude API error: '+r.status)
+  const d=await r.json()
+  return d.content.map(b=>b.text||'').join('')
+}
+function genSlug(t){
+  const d=new Date().toISOString().slice(0,10)
+  const s=t.toLowerCase().replace(/[^\w\s\uac00-\ud7a3]/g,'').replace(/\s+/g,'-').slice(0,40).replace(/-+$/,'')
+  return `${d}-${s||'report'}`
+}
+async function generateReport(){
+  const raw=document.getElementById('raw-text').value.trim()
+  const title=document.getElementById('title').value.trim()||'보고서'
+  const type=document.getElementById('report-type').value
+  if(!raw){document.getElementById('input-alert').innerHTML='<div class="alert alert-danger">⚠️ 보고서 내용을 입력해주세요.</div>';return}
+  document.getElementById('input-alert').innerHTML=''
+  const btn=document.getElementById('btn-generate')
+  btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Claude가 HTML 생성 중...'
+  const td={dashboard:'대시보드형 — 상단에 KPI 지표 카드 4-6개, Chart.js 차트 1-3개, 섹션별 카드로 구성',narrative:'서술형 — 섹션 제목과 본문 중심, 필요시 간단한 수치 하이라이트',executive:'임원 요약형 — 핵심 수치와 결론만, 1페이지 분량'}[type]
+  const sys=`당신은 보고서 텍스트를 시각적으로 아름다운 HTML 보고서로 변환하는 전문가입니다.
+출력 규칙: 순수 HTML만 출력. 코드블록 없이 <!DOCTYPE html>부터 시작. 외부리소스: Pretendard(cdn.jsdelivr.net), Chart.js(cdn.jsdelivr.net), Noto Sans KR(fonts.googleapis.com)만 허용. 모든 CSS/JS 인라인.
+디자인: 다크테마 배경#0d1117 카드#161b22 텍스트#e6edf3. 강조#4f8ef7 #7c5cfc #3fb950 #f85149. Pretendard 폰트. border-radius:12px. max-width:1100px CSS Grid.
+유형: ${td}
+KPI: 텍스트에서 숫자 포함 핵심 지표 추출. 증감있으면 delta 배지. 데이터없으면 생략(숫자 조작 금지).
+차트: 명확한 시계열/비교/비율 데이터만 Chart.js로. Canvas 부모div position:relative height:280px. color:'#e6edf3'. 불명확하면 생략.
+헤더: 회사명,제목,날짜,작성자 추출. 없으면 생략.
+푸터: Generated by Metacraft Report Publisher · 현재날짜`
+  const usr=`다음 보고서를 HTML 대시보드로 변환하세요.\n제목: ${title}\n---\n${raw}\n---`
+  try{
+    let html=await callClaude(sys,usr)
+    html=html.replace(/^```html\s*/i,'').replace(/^```\s*/i,'').replace(/\s*```$/i,'').trim()
+    state.html=html;state.title=title;state.slug=genSlug(title)
+    document.getElementById('preview-iframe').srcdoc=html
+    document.getElementById('preview-url-bar').textContent=`${cfg('url')||'https://recruit-seven-omega.vercel.app'}/reports/${state.slug}.html`
+    document.getElementById('html-source').textContent=html.slice(0,3000)+(html.length>3000?'\n...(생략)':'')
+    showPanel('preview')
+  }catch(e){document.getElementById('input-alert').innerHTML=`<div class="alert alert-danger">⚠️ ${e.message}</div>`}
+  finally{btn.disabled=false;btn.innerHTML='✨ HTML 보고서 생성'}
+}
+async function ghPut(path,content,msg){
+  const token=cfg('token'),owner=cfg('owner')||'kim02160216',repo=cfg('repo')||'Recruit'
+  const url=`https://api.github.com/repos/${owner}/${repo}/contents/${path}`
+  const enc=btoa(unescape(encodeURIComponent(content)))
+  const hdrs={'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github+json','Content-Type':'application/json'}
+  let sha;try{const r=await fetch(url,{headers:hdrs});if(r.ok){const d=await r.json();sha=d.sha}}catch{}
+  const body={message:msg,content:enc};if(sha)body.sha=sha
+  const r=await fetch(url,{method:'PUT',headers:hdrs,body:JSON.stringify(body)})
+  if(!r.ok){const e=await r.json();throw new Error(e.message||'GitHub push 실패')}
+  return r.json()
+}
+async function updateIndex(slug,title){
+  const owner=cfg('owner')||'kim02160216',repo=cfg('repo')||'Recruit'
+  const siteUrl=cfg('url')||'https://recruit-seven-omega.vercel.app'
+  const token=cfg('token')
+  const apiUrl=`https://api.github.com/repos/${owner}/${repo}/contents/index.html`
+  const hdrs={'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github+json'}
+  let ex='',sha
+  try{const r=await fetch(apiUrl,{headers:hdrs});if(r.ok){const d=await r.json();sha=d.sha;ex=decodeURIComponent(escape(atob(d.content.replace(/\n/g,''))))}}
+  catch{}
+  const date=new Date().toLocaleDateString('ko-KR')
+  const rUrl=`${siteUrl}/reports/${slug}.html`
+  const card=`<a class="report-card" href="${rUrl}" target="_blank"><div class="card-icon blue">📊</div><div class="card-body"><div class="card-title">${title}</div><div class="card-desc">${slug}</div></div><div class="card-meta"><div class="card-date">${date}</div><div class="card-badge">NEW</div></div></a>`
+  let updated
+  if(ex&&ex.includes('class="report-list"')){
+    updated=ex.replace(/(<div[^>]*class="report-list"[^>]*>)/,`$1\n${card}`)
+  }else{
+    updated=`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>내부 보고서</title><link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Pretendard',system-ui;background:#FAFBFD;color:#1A1D23;line-height:1.7}.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}.ph{margin-bottom:36px}.ph .org{font-size:12px;font-weight:600;color:#2C5AE9;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}.ph h1{font-size:26px;font-weight:800;letter-spacing:-.5px}.ph .desc{font-size:14px;color:#8B90A0;margin-top:6px}.report-list{display:flex;flex-direction:column;gap:12px}.report-card{display:flex;align-items:center;gap:20px;background:#fff;border:1px solid #E8EBFD;border-radius:12px;padding:24px 28px;transition:all .2s;text-decoration:none;color:inherit}.report-card:hover{border-color:#2C5AE9;transform:translateY(-2px)}.card-icon{flex-shrink:0;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px}.card-icon.blue{background:#EBF0FF;color:#2C5AE9}.card-body{flex:1;min-width:0}.card-title{font-size:16px;font-weight:700;margin-bottom:3px}.card-desc{font-size:13px;color:#4A5068;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.card-meta{flex-shrink:0;text-align:right}.card-date{font-size:12px;color:#8B90A0;font-weight:500}.card-badge{display:inline-block;font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;margin-top:4px;background:#EBF0FF;color:#1E3FA6}</style></head><body><div class="page"><div class="ph"><div class="org">Metacraft</div><h1>내부 보고서</h1><div class="desc">최신 보고서가 자동으로 목록에 추가됩니다.</div></div><div class="report-list">${card}</div></div></body></html>`
+  }
+  await ghPut('index.html',updated,`보고서 목록 업데이트: ${title}`)
+}
+async function publishReport(){
+  if(!cfg('token')){document.getElementById('preview-alert').innerHTML='<div class="alert alert-danger">⚠️ 설정 탭에서 GitHub Token을 입력해주세요.</div>';return}
+  document.getElementById('btn-publish').disabled=true
+  showPanel('deploying')
+  function setStep(id,s){
+    const el=document.getElementById(id),icon=document.getElementById(id+'-icon')
+    el.classList.remove('done','active');icon.classList.remove('done-bg','active-bg','pending-bg')
+    if(s==='active'){el.classList.add('active');icon.classList.add('active-bg');icon.innerHTML='<div class="spinner" style="width:14px;height:14px;border-width:1.5px;"></div>'}
+    else if(s==='done'){el.classList.add('done');icon.classList.add('done-bg');icon.textContent='✓'}
+    else icon.classList.add('pending-bg')
+  }
+  try{
+    setStep('ps1','active')
+    const siteUrl=cfg('url')||'https://recruit-seven-omega.vercel.app'
+    await ghPut(`reports/${state.slug}.html`,state.html,`보고서 추가: ${state.title}`)
+    state.publishedUrl=`${siteUrl}/reports/${state.slug}.html`
+    setStep('ps1','done')
+    setStep('ps2','active')
+    await updateIndex(state.slug,state.title)
+    setStep('ps2','done')
+    setStep('ps3','active')
+    await new Promise(r=>setTimeout(r,3000))
+    setStep('ps3','done')
+    const h=JSON.parse(localStorage.getItem('rp_history')||'[]')
+    h.unshift({slug:state.slug,title:state.title,url:state.publishedUrl,date:new Date().toISOString()})
+    if(h.length>50)h.pop()
+    localStorage.setItem('rp_history',JSON.stringify(h))
+    document.getElementById('final-url').textContent=state.publishedUrl
+    showPanel('done')
+  }catch(e){
+    document.getElementById('deploy-alert').innerHTML=`<div class="alert alert-danger">⚠️ 배포 실패: ${e.message}</div>`
+    document.getElementById('btn-publish').disabled=false
+  }
+}
+function renderHistory(){
+  const h=JSON.parse(localStorage.getItem('rp_history')||'[]')
+  const el=document.getElementById('history-list')
+  if(!h.length){el.innerHTML='<div style="color:var(--muted);font-size:13px;padding:20px 0;">아직 배포한 보고서가 없습니다.</div>';return}
+  el.innerHTML='<div class="report-list">'+h.map(x=>`<div class="report-item" onclick="window.open('${x.url}','_blank')"><div class="report-icon">📊</div><div class="report-info"><div class="report-name">${x.title}</div><div class="report-meta">${x.date.slice(0,10)} · ${x.url}</div></div><div class="report-arrow">↗</div></div>`).join('')+'</div>'
+}
+function copyUrl(){navigator.clipboard.writeText(state.publishedUrl);const b=document.getElementById('copy-btn');b.textContent='✅ 복사됨';setTimeout(()=>b.textContent='📋 URL 복사',1500)}
+function openUrl(){window.open(state.publishedUrl,'_blank')}
+function clearAll(){document.getElementById('raw-text').value='';document.getElementById('title').value='';document.getElementById('input-alert').innerHTML=''}
+function resetAll(){state={html:'',title:'',slug:'',publishedUrl:''};showPanel('input');document.getElementById('btn-publish').disabled=false}
+function goToList(){
+  showPanel('input')
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'))
+  document.querySelectorAll('[id^="tab-"]').forEach(el=>el.classList.add('hidden'))
+  document.querySelector('.tab:nth-child(2)').classList.add('active')
+  document.getElementById('tab-history').classList.remove('hidden')
+  renderHistory()
+}
+loadConfig()
+if(!cfg('token'))document.getElementById('input-alert').innerHTML='<div class="alert alert-info">ℹ️ GitHub Token이 없습니다. <b>설정 탭</b>에서 입력하면 배포 기능이 활성화됩니다. (HTML 생성 미리보기는 Token 없이도 사용 가능)</div>'
+<\/script>
+</body>
+</html>
