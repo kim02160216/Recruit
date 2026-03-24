@@ -123,9 +123,9 @@
       <div class="panel-title">📝 보고서 내용 붙여넣기</div>
       <div class="panel-sub">보고서 원문을 붙여넣으면 Claude AI가 대시보드형 HTML로 자동 변환합니다.</div>
       <div class="tabs">
-        <button class="tab active" onclick="switchTab('write')">작성</button>
-        <button class="tab" onclick="switchTab('history')">보고서 목록</button>
-        <button class="tab" onclick="switchTab('settings')">설정</button>
+        <button class="tab active" onclick="switchTab('write',this)">작성</button>
+        <button class="tab" onclick="switchTab('history',this)">보고서 목록</button>
+        <button class="tab" onclick="switchTab('settings',this)">설정</button>
       </div>
       <div id="tab-write">
         <div class="row2">
@@ -217,10 +217,10 @@ function showPanel(name){
   if(map[name]!==undefined)dots[map[name]].classList.add('active')
 }
 function goBack(){showPanel('input')}
-function switchTab(t){
-  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'))
-  document.querySelectorAll('[id^="tab-"]').forEach(el=>el.classList.add('hidden'))
-  event.target.classList.add('active')
+function switchTab(t,el){
+  document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'))
+  document.querySelectorAll('[id^="tab-"]').forEach(e=>e.classList.add('hidden'))
+  ;(el||event?.target)?.classList.add('active')
   document.getElementById('tab-'+t).classList.remove('hidden')
   if(t==='history')renderHistory()
   if(t==='settings')loadSettingsForm()
