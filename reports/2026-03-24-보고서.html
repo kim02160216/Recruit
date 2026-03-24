@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 프롬프트 PD 공고 분석 보고서</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Pretendard', 'Noto Sans KR', sans-serif; background: #F0F4F8; color: #1A202C; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; padding: 48px 32px; }
+        
+        .header { 
+            background: linear-gradient(135deg, #1a2847 0%, #2C5AE9 60%, #6B46C1 100%);
+            border-radius: 20px;
+            padding: 44px 52px;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .badge { 
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .date { font-size: 12px; opacity: 0.75; }
+        .title { font-size: 34px; font-weight: 800; margin-bottom: 8px; line-height: 1.2; }
+        .subtitle { opacity: 0.75; font-size: 16px; font-weight: 400; }
+        
+        .section { 
+            background: white;
+            border-radius: 16px;
+            padding: 36px 40px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .section-header { display: flex; align-items: center; margin-bottom: 24px; }
+        .section-number { 
+            background: #2C5AE9;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+        .section-title { font-size: 20px; font-weight: 700; }
+        
+        .issue-box { 
+            background: #FFF5F5;
+            border: 1px solid #FED7D7;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin: 10px 0;
+        }
+        .issue-header { 
+            font-weight: 700;
+            color: #C53030;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .issue-content { color: #744210; font-size: 14px; line-height: 1.5; }
+        
+        .position-card { 
+            background: linear-gradient(135deg, #2C5AE9, #6B46C1);
+            border-radius: 14px;
+            padding: 24px 28px;
+            color: white;
+            margin: 16px 0;
+        }
+        .position-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+        
+        .direction-point { 
+            background: #EEF3FF;
+            border-radius: 12px;
+            padding: 16px 22px;
+            border-left: 4px solid #2C5AE9;
+            margin: 16px 0;
+        }
+        .direction-content { color: #1E40AF; font-weight: 500; }
+        
+        .list-item { margin: 8px 0; line-height: 2.0; }
+        .arrow { color: #2C5AE9; margin-right: 8px; }
+        .keyword { font-weight: 700; }
+        
+        .badge-required { 
+            background: #EBF0FF;
+            color: #2C5AE9;
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+        .badge-preferred { 
+            background: #F0FDF4;
+            color: #16A34A;
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+        
+        .footer { text-align: center; padding: 40px 0 20px; color: #CBD5E0; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-top">
+                <div class="badge">공고 분석</div>
+                <div class="date">2024.01</div>
+            </div>
+            <div class="title">AI 프롬프트 PD 공고 분석</div>
+            <div class="subtitle">채팅 캐릭터 서비스 운영 직무 검토 보고서</div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <div class="section-title">직무 정체성 분석</div>
+            </div>
+            
+            <div class="position-card">
+                <div class="position-title">AI 프롬프트 PD</div>
+                <div>기술 엔지니어가 아닌 콘텐츠 기획·운영 직무로 명확히 구분됨</div>
+            </div>
+            
+            <div class="direction-point">
+                <div class="direction-content">
+                    <span class="arrow">→</span>실제 업무 흐름이 일관성 있게 설계되어 있음
+                </div>
+            </div>
+            
+            <div class="list-item">
+                <span class="arrow">▸</span><span class="keyword">캐릭터 페르소나 설계:</span> 초기 캐릭터 컨셉 및 성격 정의
+            </div>
+            <div class="list-item">
+                <span class="arrow">▸</span><span class="keyword">프롬프트 제작:</span> AI 대화 품질 최적화를 위한 핵심 업무
+            </div>
+            <div class="list-item">
+                <span class="arrow">▸</span><span class="keyword">시나리오 기획:</span> 사용자 경험 설계 및 대화 흐름 구성
+            </div>
+            <div class="list-item">
+                <span class="arrow">▸</span><span class="keyword">QA 및 IP 온보딩:</span> 품질 관리 및 서비스 런칭
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <div class="section-title">자격 요건 적정성</div>
+            </div>
+            
+            <div class="direction-point">
+                <div class="direction-content">
+                    <span class="arrow">→</span>현실적이고 직무 특성에 맞는 요구사항 설정
+                </div>
+            </div>
+            
+            <div class="list-item">
+                <span class="arrow">▸</span><span class="keyword">경력 무관 정책:</span> 신입 진입 가능한 포지션으로 적절함<span class="badge-required">필수</span>
+            </div>
+            <div class="list-item">
+                <span class="arrow">▸</span><span class="keyword">서브컬처 이해도:</span> Chatple/NovelChat 서비스 맥락과 일치<span class="badge-required">필수</span>
+            </div>
+            <div class="list-item">
+                <span class="arrow">▸</span><span class="keyword">캐릭터 글쓰기 능력:</span> 직무 핵심 역량으로 정확히 설정<span class="badge-required">필수</span>
+            </div>
+            <div class="list-item">
+                <span class="arrow">▸</span><span class="keyword">LLM 활용 경험:</span> 엔지니어링이 아닌 서비스 활용 수준으로 적절함<span class="badge-preferred">우대</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <div class="section-title">보완 검토 사항</div>
+            </div>
+            
+            <div class="issue-box">
+                <div class="issue-header">
+                    <span>⚠️</span>운영 업무 범위 부족
+                </div>
+                <div class="issue-content">
+                    공고 제목에 "운영"이 포함되어 있으나, 실제 운영 업무가 미흡합니다. 라이브 서비스 모니터링, 주간/월간 대화 품질 리포트, 캐릭터별 인기도·이탈률 분석 등 데이터 기반 운영 업무 추가 필요.
+                </div>
+            </div>
+            
+            <div class="issue-box">
+                <div class="issue-header">
+                    <span>⚠️</span>남성향 콘텐츠 언급 누락
+                </div>
+                <div class="issue-content">
+                    Chatple 서비스 특성상 "남성향 콘텐츠 표현에 거부감이 없으신 분" 조건을 필요역량 또는 참고사항에 명시하여 입사 후 미스매치 방지 권장.
+                </div>
+            </div>
+            
+            <div class="issue-box">
+                <div class="issue-header">
+                    <span>⚠️</span>유료 전환 설계 누락
+                </div>
+                <div class="issue-content">
+                    코인 기반 과금 구조에서 무료→유료 전환 시점의 대화 설계는 핵심 비즈니스 기여 포인트인데 공고에서 누락됨. 시나리오 기획 파트에 추가 검토 필요.
+                </div>
+            </div>
+            
+            <div class="issue-box">
+                <div class="issue-header">
+                    <span>⚠️</span>오타 수정 필요
+                </div>
+                <div class="issue-content">
+                    "케릭터" → "캐릭터"로 오타 수정 필요.
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">4</div>
+                <div class="section-title">종합 평가</div>
+            </div>
+            
+            <div class="direction-point">
+                <div class="direction-content">
+                    <span class="arrow">→</span>전체적으로 완성도가 높은 공고로 평가됨
+                </div>
+            </div>
+            
+            <div class="list-item">
+                <span class="arrow">▸</span><span class="keyword">직무 경계 명확성:</span> AI 프롬프트 PD 역할이 구체적으로 정의됨
+            </div>
+            <div class="list-item">
+                <span class="arrow">▸</span><span class="keyword">역량-직급 정합성:</span> 요구 역량과 직급 수준이 적절히 매칭됨
+            </div>
+            <div class="list-item">
+                <span class="arrow">▸</span><span class="keyword">서비스 연관성:</span> Chatple/NovelChat 서비스 맥락과 정확히 부합
+            </div>
+            
+            <div class="direction-point">
+                <div class="direction-content">
+                    <span class="arrow">→</span>위 보완사항은 필수가 아닌 정밀도 향상을 위한 권장사항임
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            AI 프롬프트 PD 공고 분석 완료 | 2024년 1월 기준
+        </div>
+    </div>
+</body>
+</html>
