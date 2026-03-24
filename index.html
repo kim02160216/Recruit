@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>채용 공고 개선안 보고서</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAFBFD;
+    --surface: #FFFFFF;
+    --text-primary: #1A1D23;
+    --text-secondary: #4A5068;
+    --text-muted: #8B90A0;
+    --accent: #2C5AE9;
+    --accent-light: #EBF0FF;
+    --accent-dark: #1E3FA6;
+    --danger: #DC3545;
+    --danger-bg: #FFF5F5;
+    --danger-border: #FED7D7;
+    --success: #16A34A;
+    --success-bg: #F0FDF4;
+    --divider: #E8EBF0;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ===== HEADER ===== */
+  .report-header {
+    background: linear-gradient(135deg, #1A1D23 0%, #2C3142 60%, #3A4260 100%);
+    border-radius: 16px;
+    padding: 48px 44px;
+    margin-bottom: 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .report-header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -40px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(44,90,233,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .report-header::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 30%;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(44,90,233,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .header-badge {
+    background: rgba(44,90,233,0.25);
+    color: #93B4FF;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .header-date {
+    color: rgba(255,255,255,0.4);
+    font-size: 13px;
+    font-weight: 400;
+  }
+  .report-header h1 {
+    font-size: 30px;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .report-header .subtitle {
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.55);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--divider);
+    padding: 36px 40px;
+    margin-bottom: 20px;
+  }
+
+  .section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    background: var(--accent);
+    color: #FFF;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 8px;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    letter-spacing: -0.3px;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    margin-top: 28px;
+    padding-left: 12px;
+    border-left: 3px solid var(--accent);
+  }
+  h3:first-of-type { margin-top: 0; }
+
+  h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent-dark);
+    margin-bottom: 12px;
+    margin-top: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== PROBLEM ITEMS ===== */
+  .problem-group { margin-bottom: 24px; }
+  .problem-group:last-child { margin-bottom: 0; }
+
+  .problem-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    background: #F8F9FC;
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    border-left: 3px solid var(--danger);
+  }
+  .problem-item .icon {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    background: var(--danger);
+    color: #FFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .problem-item .label {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 14px;
+  }
+  .problem-item .desc {
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    margin-top: 2px;
+    line-height: 1.6;
+  }
+
+  /* ===== CALLOUT ===== */
+  .callout {
+    border-radius: var(--radius-sm);
+    padding: 20px 24px;
+    margin-top: 28px;
+  }
+  .callout-danger {
+    background: var(--danger-bg);
+    border: 1px solid var(--danger-border);
+  }
+  .callout-danger .callout-title {
+    color: var(--danger);
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  .callout-danger p {
+    color: #7C2D2D;
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+
+  /* ===== IMPROVEMENT CARDS ===== */
+  .improve-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--divider);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .improve-card-header {
+    padding: 20px 28px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: #FFF;
+  }
+  .improve-card-header .card-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+  .improve-card-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFF;
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+  .improve-card-body { padding: 28px 32px; }
+
+  .direction-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+  }
+
+  /* ===== TASK / SKILL LIST ===== */
+  .task-list { list-style: none; padding: 0; }
+  .task-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #F2F3F7;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+  .task-list li:last-child { border-bottom: none; }
+  .task-list li strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .pref-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .pref-tag.required {
+    background: #DBEAFE;
+    color: #1E40AF;
+  }
+  .pref-tag.preferred {
+    background: #F3E8FF;
+    color: #6B21A8;
+  }
+
+  /* ===== COMPARISON TABLE ===== */
+  .compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--divider);
+    font-size: 13.5px;
+  }
+  .compare-table thead th {
+    background: #1A1D23;
+    color: #FFF;
+    font-weight: 600;
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+  }
+  .compare-table thead th:first-child {
+    text-align: center;
+    width: 120px;
+  }
+  .compare-table tbody td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--divider);
+    color: var(--text-secondary);
+    line-height: 1.55;
+    vertical-align: top;
+  }
+  .compare-table tbody tr:last-child td { border-bottom: none; }
+  .compare-table tbody td:first-child {
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+    background: #F8F9FC;
+    white-space: nowrap;
+  }
+  .compare-table tbody tr:nth-child(even) td:not(:first-child) {
+    background: #FCFCFE;
+  }
+
+  /* ===== KEY CHANGE SUMMARY ===== */
+  .key-changes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .key-change-card {
+    padding: 20px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--divider);
+  }
+  .key-change-card.engineer {
+    background: linear-gradient(135deg, #EBF0FF 0%, #F5F8FF 100%);
+    border-color: #C7D7FE;
+  }
+  .key-change-card.creator {
+    background: linear-gradient(135deg, #F0FDF4 0%, #F5FFF8 100%);
+    border-color: #BBF7D0;
+  }
+  .key-change-card .kc-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+  }
+  .key-change-card .kc-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .key-change-card .kc-item .arrow {
+    flex-shrink: 0;
+    color: var(--accent);
+    font-weight: 700;
+    margin-top: 1px;
+  }
+  .key-change-card.creator .kc-item .arrow { color: var(--success); }
+
+  /* ===== FOOTER ===== */
+  .report-footer {
+    text-align: center;
+    padding: 32px 0 0;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+  .report-footer .divider-line {
+    width: 60px;
+    height: 2px;
+    background: var(--divider);
+    margin: 0 auto 16px;
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: #FFF; }
+    .page { padding: 0; max-width: 100%; }
+    .section, .improve-card { box-shadow: none; break-inside: avoid; }
+    .report-header { border-radius: 0; }
+    .key-changes { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="report-header">
+    <div class="header-meta">
+      <span class="header-badge">Internal Report</span>
+      <span class="header-date">2026.03.24</span>
+    </div>
+    <h1>채용 공고 개선안</h1>
+    <div class="subtitle">AI 프롬프트 엔지니어 · AI 이미지 크리에이터 — 직무 재정의 및 공고 개선 방향</div>
+  </div>
+
+  <!-- SECTION 1: 현황 진단 -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-number">1</span>
+      현황 진단: 현재 공고의 문제점
+    </div>
+
+    <div class="problem-group">
+      <h3>AI 프롬프트 엔지니어 공고</h3>
+      <div class="problem-item">
+        <div class="icon">!</div>
+        <div>
+          <div class="label">이미지 생성 도구 중심으로 편중</div>
+          <div class="desc">ComfyUI, LoRA, 체크포인트 등 비주얼 생성 도구 위주로 기술되어 있어 프롬프트 엔지니어링의 범용적 역량(텍스트 기반 서비스 설계)이 전혀 드러나지 않음</div>
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="icon">!</div>
+        <div>
+          <div class="label">LLM 서비스 적용 역량 누락</div>
+          <div class="desc">챗봇(Chatple/NovelChat), 번역, 요약 등 실제 운영 중인 텍스트 기반 AI 서비스에 대한 프롬프트 설계 역량이 반영되지 않음</div>
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="icon">!</div>
+        <div>
+          <div class="label">엔지니어적 확장성 부재</div>
+          <div class="desc">API 연동, 워크플로우 자동화 등 기술적 업무 범위가 표현되지 않아 이미지 크리에이터와 차별화 불가</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="problem-group">
+      <h3>AI 이미지 크리에이터 공고</h3>
+      <div class="problem-item">
+        <div class="icon">!</div>
+        <div>
+          <div class="label">전통적 웹툰 작가 역할에 치우침</div>
+          <div class="desc">'원작 소설 분석 → 캐릭터 이미지 생성' 중심으로 기술되어 AI 도구 활용보다 만화적 감각에 초점이 맞춰져 있음</div>
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="icon">!</div>
+        <div>
+          <div class="label">AI 워크플로우 역량이 우대사항에만 위치</div>
+          <div class="desc">ComfyUI, LoRA, ControlNet 등은 사실상 필수 역량인데 우대사항으로만 기재되어 적합 인재 선별력이 떨어짐</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-danger">
+      <div class="callout-title">⚠ 핵심 문제</div>
+      <p>프롬프트 엔지니어 공고가 이미지 크리에이터처럼 읽히고, 이미지 크리에이터 공고는 전통 웹툰 작가처럼 읽힘.<br>
+      → 두 직무의 차별점이 모호하여 적합한 인재 유입이 어려운 구조.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: 개선안 -->
+  <div class="section" style="background:transparent;border:none;box-shadow:none;padding:0;">
+    <div class="section-title" style="padding: 0 4px;">
+      <span class="section-number">2</span>
+      개선안 (직급·업무 범위 현실화 반영)
+    </div>
+
+    <!-- 2-1. 프롬프트 엔지니어 -->
+    <div class="improve-card">
+      <div class="improve-card-header">
+        <div class="card-label">Position A</div>
+        <h3>AI 프롬프트 엔지니어 (AI Prompt Engineer)</h3>
+      </div>
+      <div class="improve-card-body">
+        <div class="direction-badge">
+          ➜ 개선 방향: 이미지 생성을 넘어 LLM 기반 서비스(챗봇·번역) 프롬프트 설계 및 실무 적용 능력에 초점
+        </div>
+
+        <h4>담당 업무</h4>
+        <ul class="task-list">
+          <li><strong>서비스 프롬프트 설계·운영:</strong> Chatple/NovelChat 챗봇, 번역, 요약 등 자사 서비스의 프롬프트 작성 및 지속적 품질 개선</li>
+          <li><strong>멀티모달 워크플로우 설계:</strong> 텍스트→이미지→영상으로 이어지는 제작 파이프라인의 프롬프트 자동화 프로세스 구축</li>
+          <li><strong>프롬프트 테스트·개선:</strong> 응답 정확도, 일관성 등 정성적·정량적 품질 검증 및 반복 개선</li>
+          <li><strong>API 연동 지원:</strong> OpenAI, Claude 등 외부 LLM API를 활용한 서비스 기능 프로토타이핑 참여</li>
+        </ul>
+
+        <h4>필요 역량</h4>
+        <ul class="task-list">
+          <li><strong>프롬프트 엔지니어링 실무 이해:</strong> Few-shot, Chain-of-Thought 등 기본 기법을 이해하고 서비스에 적용해본 경험 <span class="pref-tag required">필수</span></li>
+          <li><strong>LLM API 활용 경험:</strong> ChatGPT, Claude 등 상용 LLM을 업무에 활용해본 경험 <span class="pref-tag required">필수</span></li>
+          <li><strong>AI 콘텐츠 트렌드 이해:</strong> 생성형 AI 서비스 동향에 대한 관심과 빠른 학습 능력 <span class="pref-tag required">필수</span></li>
+          <li><strong>LLM 프레임워크 경험:</strong> LangChain, LlamaIndex 등 워크플로우 도구 활용 경험 <span class="pref-tag preferred">우대</span></li>
+          <li><strong>RAG 파이프라인 이해:</strong> 검색 증강 생성 등 데이터 연동 프롬프트 설계 경험 <span class="pref-tag preferred">우대</span></li>
+          <li><strong>Python 기본 활용:</strong> 간단한 스크립트 작성·자동화 가능 수준 <span class="pref-tag preferred">우대</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2-2. AI 이미지 크리에이터 -->
+    <div class="improve-card">
+      <div class="improve-card-header" style="background: linear-gradient(135deg, #16A34A 0%, #0D7C36 100%);">
+        <div class="card-label">Position B</div>
+        <h3>AI 이미지 크리에이터 / 웹툰 작가 (AI Image Creator)</h3>
+      </div>
+      <div class="improve-card-body">
+        <div class="direction-badge" style="background:#F0FDF4;color:#15803D;">
+          ➜ 개선 방향: 전통 작화 역량 + 생성형 AI 툴 심화 활용(ComfyUI, LoRA)을 필수 역량으로 결합
+        </div>
+
+        <h4>담당 업무</h4>
+        <ul class="task-list">
+          <li><strong>IP 기반 캐릭터 이미지 생성:</strong> 노벨피아 원작 소설의 캐릭터성 및 세계관을 유지하는 AI 기반 캐릭터 시트·일러스트 제작</li>
+          <li><strong>AI 웹툰 제작 파이프라인 운용:</strong> ComfyUI, Stable Diffusion 활용 콘티→완성본 공정 단축 및 품질 관리</li>
+          <li><strong>스타일 일관성 유지:</strong> LoRA 모델 활용·튜닝을 통한 작품별 고유 화풍 유지 (학습은 엔지니어 협업)</li>
+          <li><strong>Post-Production:</strong> AI 생성물의 디테일 보정(In-painting) 및 최종 리터칭을 통한 상용 수준 결과물 도출</li>
+        </ul>
+
+        <h4>필요 역량</h4>
+        <ul class="task-list">
+          <li><strong>생성 AI 툴 숙련도:</strong> ComfyUI 워크플로우 활용, ControlNet, 프롬프트 작성 경험 <span class="pref-tag required">필수</span></li>
+          <li><strong>콘텐츠 연출력:</strong> 웹툰적 연출(구도, 투시) 및 남성향 콘텐츠 비주얼 트렌드 이해 <span class="pref-tag required">필수</span></li>
+          <li><strong>그래픽 툴 활용:</strong> Photoshop 등을 활용한 보정·리터칭 및 기본 드로잉 수정 <span class="pref-tag required">필수</span></li>
+          <li><strong>LoRA/Custom 모델 학습 경험:</strong> 직접 학습 데이터 구성 및 모델 트레이닝 경험 <span class="pref-tag preferred">우대</span></li>
+          <li><strong>영상 제작 경험:</strong> After Effects, CapCut 등을 활용한 영상 편집·모션 경험 <span class="pref-tag preferred">우대</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: 비교표 -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-number">3</span>
+      직무 간 역할 구분 비교
+    </div>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>구분</th>
+          <th>AI 프롬프트 엔지니어</th>
+          <th>AI 이미지 크리에이터</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>핵심 목표</td>
+          <td>자사 AI 서비스(챗봇·번역)의 프롬프트 품질 최적화 및 워크플로우 확장</td>
+          <td>원작 IP 기반 고품질 비주얼 콘텐츠의 효율적 양산</td>
+        </tr>
+        <tr>
+          <td>주요 도구</td>
+          <td>ChatGPT / Claude API, Python, 프롬프트 설계 프레임워크</td>
+          <td>ComfyUI, Stable Diffusion, LoRA, Photoshop</td>
+        </tr>
+        <tr>
+          <td>결과물</td>
+          <td>서비스 프롬프트 셋, 자동화 워크플로우, 품질 테스트 리포트</td>
+          <td>캐릭터 시트, 웹툰 컷, 홍보용 일러스트</td>
+        </tr>
+        <tr>
+          <td>비즈니스 기여</td>
+          <td>Chatple 챗봇 품질 향상, 글로벌 번역 자동화, 사내 AI 활용 고도화</td>
+          <td>원작 IP의 멀티미디어화 가속, 버추얼 인플루언서 비주얼 제작</td>
+        </tr>
+        <tr>
+          <td>협업 구조</td>
+          <td>기획팀·개발팀과 서비스 로직 설계 협업</td>
+          <td>프롬프트 엔지니어·콘텐츠 기획팀과 제작 파이프라인 협업</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="key-changes">
+      <div class="key-change-card engineer">
+        <div class="kc-title">🔵 프롬프트 엔지니어 주요 변경</div>
+        <div class="kc-item"><span class="arrow">→</span> 이미지 생성 도구 → 텍스트 기반 서비스 프롬프트 설계로 전환</div>
+        <div class="kc-item"><span class="arrow">→</span> LangChain/RAG 등 고급 역량은 우대사항으로 이동 (직급 현실화)</div>
+        <div class="kc-item"><span class="arrow">→</span> 챗봇·번역 등 실제 서비스 맥락 명시</div>
+      </div>
+      <div class="key-change-card creator">
+        <div class="kc-title">🟢 이미지 크리에이터 주요 변경</div>
+        <div class="kc-item"><span class="arrow">→</span> ComfyUI/ControlNet 활용을 우대→필수로 격상</div>
+        <div class="kc-item"><span class="arrow">→</span> LoRA 직접 학습은 우대, 활용·튜닝은 필수로 분리</div>
+        <div class="kc-item"><span class="arrow">→</span> 엔지니어 협업 구조 명시 (역할 겹침 방지)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="report-footer">
+    <div class="divider-line"></div>
+    메타크래프트 · 채용 공고 개선안 내부 보고서 · 2026.03
+  </div>
+
+</div>
+</body>
+</html>
