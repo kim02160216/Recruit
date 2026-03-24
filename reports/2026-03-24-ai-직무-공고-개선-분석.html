@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 직무 공고 개선 분석</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background-color: #FAFBFD;
+            color: #1A1D23;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            padding: 40px 32px;
+            min-height: 100vh;
+        }
+        
+        .header {
+            margin-bottom: 48px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #E8EBFD;
+        }
+        
+        .title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1A1D23;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #6B46C1;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1A1D23;
+            margin-bottom: 20px;
+            padding-left: 16px;
+            border-left: 4px solid #2C5AE9;
+        }
+        
+        .section-desc {
+            font-size: 16px;
+            line-height: 1.9;
+            color: #1A1D23;
+            margin-bottom: 24px;
+        }
+        
+        .job-category {
+            background-color: #F8F9FF;
+            border-left: 4px solid #6B46C1;
+            padding: 20px;
+            margin-bottom: 24px;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .job-category h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #6B46C1;
+            margin-bottom: 12px;
+        }
+        
+        .category-desc {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #1A1D23;
+        }
+        
+        .subsection {
+            margin-bottom: 32px;
+        }
+        
+        .subsection-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1A1D23;
+            margin-bottom: 16px;
+            background-color: #F1F3F9;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+        
+        .task-list, .skill-list {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .task-list li, .skill-list li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 16px;
+            line-height: 1.9;
+            font-size: 16px;
+        }
+        
+        .task-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #2C5AE9;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .skill-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #6B46C1;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .highlight {
+            background-color: #FFF4E6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+        
+        .strong {
+            font-weight: 600;
+            color: #2C5AE9;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #E8EBFD;
+            margin: 40px 0;
+        }
+        
+        .footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #E8EBFD;
+            text-align: center;
+            font-size: 14px;
+            color: #8B95A1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">AI 직무 공고 개선 분석</h1>
+            <div class="subtitle">잡코리아/사람인 프롬프트 엔지니어 & AI 이미지 크리에이터 직무 재정의</div>
+        </header>
+
+        <section class="section">
+            <h2 class="section-title">1. AI 프롬프트 엔지니어 (AI Prompt Engineer) 개선 방향</h2>
+            
+            <div class="job-category">
+                <h3>핵심 전환 방향</h3>
+                <p class="category-desc">이미지 생성을 넘어 <span class="strong">LLM(언어모델) 아키텍처 설계</span> 및 <span class="strong">서비스 적용 능력</span>에 초점을 맞춥니다.</p>
+            </div>
+
+            <div class="subsection">
+                <h4 class="subsection-title">담당 업무</h4>
+                <ul class="task-list">
+                    <li><span class="highlight">프롬프트 아키텍처 설계</span>: 챗봇, 번역, 요약 등 텍스트 기반 서비스의 성능 극대화를 위한 체계적인 프롬프트 구조(Chain-of-Thought 등) 설계</li>
+                    <li><span class="highlight">LLM 파이프라인 최적화</span>: RAG(검색 증강 생성) 기반의 데이터 연동 프롬프트 개발 및 응답 품질 고도화</li>
+                    <li><span class="highlight">멀티모달 워크플로우 구축</span>: 텍스트-이미지-비디오로 이어지는 연쇄적 프롬프트 자동화 프로세스 설계 및 API 연동 지원</li>
+                    <li><span class="highlight">프롬프트 성능 평가</span>: 정량적 지표 기반의 응답 정확도 테스트 및 헬루시네이션(환각 현상) 제어 로직 개발</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <h4 class="subsection-title">필요 역량</h4>
+                <ul class="skill-list">
+                    <li><span class="highlight">공학적 프롬프트 설계 능력</span>: 단순 명령어 입력을 넘어 프롬프트 엔지니어링 기법(Few-shot, ReAct 등)에 대한 깊은 이해</li>
+                    <li><span class="highlight">LLM 프레임워크 이해</span>: LangChain, LlamaIndex 등 AI 워크플로우 도구 활용 경험</li>
+                    <li><span class="highlight">데이터 리터러시</span>: 모델별 응답 특성을 분석하고 이를 서비스 로직에 반영할 수 있는 분석적 사고</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="section">
+            <h2 class="section-title">2. AI 이미지 크리에이터 / 웹툰 작가 (AI Image Creator) 개선 방향</h2>
+            
+            <div class="job-category">
+                <h3>핵심 전환 방향</h3>
+                <p class="category-desc">전통적 작화 역량에 <span class="strong">생성형 AI 툴의 심화 활용(LoRA, Workflow)</span> 역량을 필수적으로 결합합니다.</p>
+            </div>
+
+            <div class="subsection">
+                <h4 class="subsection-title">담당 업무</h4>
+                <ul class="task-list">
+                    <li><span class="highlight">IP 기반 고퀄리티 이미지 생성</span>: 노벨피아 원작 소설의 캐릭터성 및 세계관을 유지하는 AI 기반 캐릭터 시트 및 일러스트 제작</li>
+                    <li><span class="highlight">AI 제작 파이프라인 운용</span>: ComfyUI, Stable Diffusion 등을 활용하여 콘티에서 최종 완성본까지의 제작 공정 단축 및 품질 관리</li>
+                    <li><span class="highlight">스타일 학습 및 일관성 유지</span>: 전용 LoRA 모델 학습 및 체크포인트 튜닝을 통한 작품별 고유 화풍 유지</li>
+                    <li><span class="highlight">Post-Production</span>: AI 생성물의 디테일 보정(In-painting) 및 최종 리터칭을 통한 상용 수준의 결과물 도출</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <h4 class="subsection-title">필요 역량</h4>
+                <ul class="skill-list">
+                    <li><span class="highlight">생성 AI 툴 숙련도</span>: ComfyUI 워크플로우 설계, ControlNet 활용, Custom 모델 학습 경험</li>
+                    <li><span class="highlight">필수 콘텐츠 출력력</span>: 웹툰적 연출(구도, 투시) 및 남성향 콘텐츠 타겟의 비주얼 트렌드에 대한 높은 이해</li>
+                    <li><span class="highlight">전통적 아트 베이스</span>: 포토샵 등 그래픽 툴 활용 및 기본 드로잉 수정 역량</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="footer">
+            Generated by Metacraft Report Publisher · 2024년 12월 19일
+        </footer>
+    </div>
+</body>
+</html>
