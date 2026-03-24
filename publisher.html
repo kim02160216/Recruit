@@ -252,9 +252,10 @@ function saveConfigFromSettings(){
   setTimeout(()=>document.getElementById('settings-alert').innerHTML='',2000)
 }
 async function callClaude(sys,usr){
-  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:8000,system:sys,messages:[{role:'user',content:usr}]})})
-  if(!r.ok)throw new Error('Claude API error: '+r.status)
+  const r=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:sys,user:usr})})
+  if(!r.ok)throw new Error('API error: '+r.status)
   const d=await r.json()
+  if(d.error)throw new Error(d.error)
   return d.content.map(b=>b.text||'').join('')
 }
 function genSlug(t){
