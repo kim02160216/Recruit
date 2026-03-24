@@ -147,7 +147,7 @@
             <div class="field"><label>GitHub Owner</label><input type="text" id="s-owner"></div>
             <div class="field"><label>GitHub Repo</label><input type="text" id="s-repo"></div>
           </div>
-          <div class="field"><label>GitHub Token</label><input type="password" id="s-token"></div>
+          <div class="field" style="display:none"><label>GitHub Token</label><input type="password" id="s-token"></div>
           <div class="field"><label>Site URL</label><input type="text" id="s-url"></div>
         </div>
         <div class="btn-bar"><button class="btn btn-primary" onclick="saveConfigFromSettings()">💾 설정 저장</button></div>
@@ -318,14 +318,12 @@ async function generateReport(){
   finally{btn.disabled=false;btn.innerHTML='✨ HTML 보고서 생성'}
 }
 async function ghPut(path,content,msg){
-  const token=cfg('token'),owner=cfg('owner')||'kim02160216',repo=cfg('repo')||'Recruit'
-  const url=`https://api.github.com/repos/${owner}/${repo}/contents/${path}`
-  const enc=btoa(unescape(encodeURIComponent(content)))
-  const hdrs={'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github+json','Content-Type':'application/json'}
-  let sha;try{const r=await fetch(url,{headers:hdrs});if(r.ok){const d=await r.json();sha=d.sha}}catch{}
-  const body={message:msg,content:enc};if(sha)body.sha=sha
-  const r=await fetch(url,{method:'PUT',headers:hdrs,body:JSON.stringify(body)})
-  if(!r.ok){const e=await r.json();throw new Error(e.message||'GitHub push 실패')}
+  const r=await fetch('/api/push-report',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({path,content,message:msg})
+  })
+  if(!r.ok){const e=await r.json();throw new Error(e.error||'GitHub push 실패')}
   return r.json()
 }
 async function updateIndex(slug,title){
@@ -349,7 +347,7 @@ async function updateIndex(slug,title){
   await ghPut('index.html',updated,`보고서 목록 업데이트: ${title}`)
 }
 async function publishReport(){
-  if(!cfg('token')){document.getElementById('preview-alert').innerHTML='<div class="alert alert-danger">⚠️ 설정 탭에서 GitHub Token을 입력해주세요.</div>';return}
+  // token handled server-side
   document.getElementById('btn-publish').disabled=true
   showPanel('deploying')
   function setStep(id,s){
