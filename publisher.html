@@ -130,7 +130,8 @@
       <div id="tab-write">
         <div class="row2">
           <div class="field"><label>보고서 제목</label><input type="text" id="title" placeholder="예: 2025 Q1 플랫폼 성과 보고"></div>
-          <div class="field"><label>보고서 유형</label><select id="report-type"><option value="dashboard">대시보드형 (KPI + 차트)</option><option value="narrative">서술형 (섹션 중심)</option><option value="executive">임원 요약 (1페이지)</option></select></div>
+          <div class="field"><label>보고서 유형</label><select id="report-type"><option value="dashboard">대시보드형 (KPI + 차트)</option><option value="narrative">서술형 (섹션 중심)</option><option value="executive">임원 요약 (1페이지)</option>
+              <option value="document">문서형 (깔끔한 정리)</option></select></div>
         </div>
         <div class="field"><label>보고서 원문 (한국어/영어 모두 OK)</label><textarea id="raw-text" rows="16" placeholder="여기에 보고서 내용을 붙여넣으세요."></textarea></div>
         <div id="input-alert"></div>
@@ -271,7 +272,7 @@ async function generateReport(){
   document.getElementById('input-alert').innerHTML=''
   const btn=document.getElementById('btn-generate')
   btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Claude가 HTML 생성 중...'
-  const td={dashboard:'대시보드형 — 상단에 KPI 지표 카드 4-6개, Chart.js 차트 1-3개, 섹션별 카드로 구성',narrative:'서술형 — 섹션 제목과 본문 중심, 필요시 간단한 수치 하이라이트',executive:'임원 요약형 — 핵심 수치와 결론만, 1페이지 분량'}[type]
+  const td={dashboard:'대시보드형 — 상단에 KPI 지표 카드 4-6개, Chart.js 차트 1-3개, 섹션별 카드로 구성',narrative:'서술형 — 섹션 제목과 본문 중심, 필요시 간단한 수치 하이라이트',executive:'임원 요약형 — 핵심 수치와 결론만, 1페이지 분량',document:'문서형 — 서술형 내용을 섹션별로 깔끔하게 정리. 읽기 좋은 산문체, 들여쓰기, 구분선 활용. KPI 카드나 차트 없이 텍스트 중심의 깔끔한 문서'}[type]
   const sys=`당신은 보고서 텍스트를 시각적으로 아름다운 HTML 보고서로 변환하는 전문가입니다.
 출력 규칙: 순수 HTML만 출력. 코드블록 없이 <!DOCTYPE html>부터 시작. 외부리소스: Pretendard(cdn.jsdelivr.net), Chart.js(cdn.jsdelivr.net), Noto Sans KR(fonts.googleapis.com)만 허용. 모든 CSS/JS 인라인.
 디자인: 다크테마 배경#0d1117 카드#161b22 텍스트#e6edf3. 강조#4f8ef7 #7c5cfc #3fb950 #f85149. Pretendard 폰트. border-radius:12px. max-width:1100px CSS Grid.
