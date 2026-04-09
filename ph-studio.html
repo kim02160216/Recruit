@@ -22,12 +22,12 @@ function App() {
   const fileRef = useRef(null);
   useEffect(() => { load(); }, []);
   const load = async () => {
-    try { const r = await window.storage.get("ph-uploads", true); if (r && r.value) setPosts(JSON.parse(r.value)); } catch(e) {}
+    try { const d = localStorage.getItem("ph-uploads"); if (d) setPosts(JSON.parse(d)); } catch(e) {}
     setLoading(false);
   };
-  const save = async (data) => {
+  const save = (data) => {
     setPosts(data);
-    try { await window.storage.set("ph-uploads", JSON.stringify(data), true); } catch(e) {}
+    try { localStorage.setItem("ph-uploads", JSON.stringify(data)); } catch(e) { alert("저장 용량 초과. 오래된 항목을 삭제해주세요."); }
   };
   const handleFiles = (files) => {
     Array.from(files).filter(f => f.type.startsWith("image/")).forEach(file => {
